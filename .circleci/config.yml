@@ -1,4 +1,3 @@
-echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 jobs:
   build:
     docker:
@@ -23,6 +22,7 @@ jobs:
       - checkout
 
       - run: |
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker build -t /django.nv .   # Build the application into Docker image
           docker push /django.nv         # Push the image into registry
   integration:
