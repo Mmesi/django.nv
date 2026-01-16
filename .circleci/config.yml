@@ -54,10 +54,10 @@ jobs:
         - oast:
             requires:
               - test
-          - integration:
+        - integration:
             requires:
               - oast
-          - prod:
+        - prod:
               type: approval
               requires:
                 - integration
