@@ -16,6 +16,15 @@ jobs:
       - run: |
           pip install -r requirements.txt
           python manage.py test taskManager
+          
+  semgrep:
+    machine: true
+    steps:
+      - checkout
+      - run: docker run --rm -v ${PWD}:/src returntocorp/semgrep semgrep --config auto --output semgrep-output.json --json
+      - store_artifacts:
+          path: semgrep-output.json
+          destination: semgrep-artifact
 
   integration:
     docker:
@@ -39,8 +48,15 @@ workflows:
   django:
     jobs:
       - build
-      - test
-      - integration
+      - test:
+          requires:
+            - build
+      - semgrep:
+          requires:
+            - test
+      - integration:
+          requires:
+            - semgrep
       - prod:
           type: approval
           requires:
