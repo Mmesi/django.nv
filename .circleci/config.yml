@@ -48,7 +48,16 @@ workflows:
   django:
     jobs:
       - build
-      - test
-      - integration
+      - test:
+          requires:
+            - build
+      - integration:
+          requires:
+            - test
+      - zap_baseline:
+          requires:
+            - integration
       - prod:
           type: approval
+          requires:
+            - zap_baseline
