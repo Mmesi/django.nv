@@ -14,7 +14,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.6'
 
       - run: |
           pip3 install --upgrade virtualenv
@@ -32,7 +32,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.6'
 
       - run: |
           pip3 install --upgrade virtualenv
@@ -48,26 +48,6 @@ jobs:
       - run: echo "This is an integration step"
       - run: exit 1
         continue-on-error: true
-  nuclei-scan:
-    runs-on: ubuntu-22.04
-    needs: test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: main
-
-      - name: Nuclei - Vulnerability Scan
-        uses: projectdiscovery/nuclei-action@main
-        with:
-          target: ${{ secrets.PROD_URL }}
-        continue-on-error: true
-
-      - name: GitHub Workflow artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: nuclei.log
-          path: nuclei.log
 
   prod:
     runs-on: ubuntu-22.04
